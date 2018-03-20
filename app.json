@@ -1,0 +1,14 @@
+{
+  "pages":[
+    "pages/index/index",              
+    "pages/member/member", 
+    "pages/gameOn/gameOn",
+    "pages/gameOver/gameOver"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "桌球助手",
+    "navigationBarTextStyle":"black"
+  }
+}

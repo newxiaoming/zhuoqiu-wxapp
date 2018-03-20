@@ -1,0 +1,56 @@
+<!--gameOver.wxml-->
+<view class="container">
+  <view class="gameMumber">
+    <view class="gameMumberNun">
+      <view class="gameMumberData">
+        <image class="win" src="{{src}}"></image>
+        <text class="memberId">1</text>
+      </view>
+      <view class="gameMumberData">10%</view>
+      <view class="gameMumberData">1:1</view>
+      <view class="income" hidden='{{isHide}}'>收入40元</view>         
+    </view>
+    <view class="gameMumberNun">
+      <view class="gameMumberData vs">VS</view>
+      <view class="gameMumberData counter">{{timeOver}}</view>
+      <view class="gameMumberData type">比赛已结束</view>      
+    </view> 
+    <view class="gameMumberNun">
+      <view class="gameMumberData">
+        <image class="win" src=""></image>
+        <text class="memberId">1</text>
+      </view>    
+      <view class="gameMumberData">10%</view>  
+      <view class="gameMumberData">1:1</view> 
+      <view class="income" hidden='{{!isHide}}'>收入40元</view>        
+    </view> 
+  </view>  
+  <view class="cathecticData">
+    <view class="cathecticTxt">
+      <text class="cathecticLeft">5人投注</text>
+      <text class="cathecticRight">2人投注</text>    
+    </view>
+    <view class="cathectic">
+      <view class="cathecticBarLeft" style="width:{{width}}%;"></view>
+      <view class="cathecticBarRight" style="width:{{width}}%;"></view>
+    </view>      
+  </view>             
+  <view class="cathecticTab">
+    <scroll-view scroll-y style="height: {{height}}px;">
+      <block>
+        <view class="cathecticList">
+          <view class="userinfo">
+            <image class="userinfo-avatar" src="../images/icon_active_homepage.png"></image>
+          </view>
+          <text>2号</text>
+          <text>100元</text> 
+          <text class="gatherAmount">收入<text>40</text>元</text>
+          <text class="gatherAmount">应收<text>38</text>元</text>                           
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  <view class="shareBtn">
+    <text>分享结果</text>
+  </view>
+</view>

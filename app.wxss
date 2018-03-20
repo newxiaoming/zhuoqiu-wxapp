@@ -1,0 +1,145 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+} 
+text{
+  font-size: 30rpx;
+  color: #333;
+}
+.memberId{
+  width: 48rpx;
+  height: 48rpx;
+  display: inline-block;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(#6289e8,#85a5f8);
+  text-align: center;
+  line-height: 48rpx;
+} 
+.gameMumber{
+  width: 100%;  
+  display: flex;
+  margin-top: 24rpx;
+}
+.gameMumberNun{
+  width: 30%;
+}
+.gameMumberNun .gameMumberData{
+  text-align: center;
+  font-size: 36rpx;
+}
+.memberId{
+  font-size: 36rpx;
+}
+.gameMumber .gameMumberNun:nth-child(2){
+  width: 40%;
+}
+.gameMumberNun .vs{
+  margin-bottom: 50rpx !important;
+  font-size: 58rpx;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.gameMumberNun .gameMumberData:first-child {
+  margin-bottom: 44rpx;
+}
+.gameMumberNun .gameMumberData:nth-child(2) {
+  margin-bottom: 28rpx;
+}
+.gameMumberNun .gameMumberData:nth-child(3){
+  padding-bottom: 72rpx;
+  color: #6d91ed;
+}
+.gameMumberNun .counter{
+  margin-bottom: 18rpx !important;
+  font-size: 30rpx;
+}
+.gameMumberNun .type{
+  border-bottom: 1px solid #ddd;
+  font-size: 24rpx;
+  color: #333 !important;
+}
+.cathecticData{
+  position: relative;
+  width: 100%;
+  margin-top: 12rpx;
+}
+.cathecticTxt{
+  display: flex;
+  padding-bottom: 5rpx;
+}
+.cathecticLeft{
+  display: inline-block;
+  width: 50%;
+  padding-left: 46rpx;
+  text-align: left;
+  font-size: 24rpx;    
+}
+.cathecticRight{
+  display: inline-block;
+  width: 50%;  
+  padding-right: 46rpx;
+  text-align: right;
+  font-size: 24rpx;      
+}
+.cathectic{
+  position: relative;
+  margin:0 36rpx;
+  height: 48rpx;
+  line-height: 48rpx;  
+}
+.cathecticBarLeft{
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  height: 100%;
+  padding-left: 22rpx;
+  border-radius: 24rpx;  
+  background-color: #f85656;
+  text-align: left;
+}
+.cathecticBarRight{
+  position: absolute;
+  right: 0;
+  top: 0;  
+  z-index: 1;
+  height: 100%;  
+  padding-right: 22rpx;
+  border-radius: 24rpx;  
+  background-color: #6d91ed;
+  text-align: right;
+}
+.userinfo-avatar {  
+  width: 60rpx;  
+  height: 60rpx;  
+  border-radius: 50%;  
+}  
+.cathecticTab{
+  width: 100%;
+  margin-top: 42rpx;
+}
+.cathecticList{
+  display: flex;
+  align-items: center;
+  padding: 0 36rpx;  
+  margin-bottom: 42rpx;
+  text-align: center;
+}
+.userinfo{
+  width: 33.33%;
+}
+.cathecticList text{
+  width: 33.33%;
+}
+.cathecticList .userinfo{
+  text-align: left;
+}
+.cathecticList text:last-child{
+  text-align: right;
+} 

@@ -1,0 +1,77 @@
+<!--gameOn.wxml-->
+<view class="container">
+  <view class="gameMumber">
+    <view class="gameMumberNun">
+      <view class="gameMumberData"><text class="memberId">1</text></view>
+      <view class="gameMumberData">10%</view>
+      <view class="gameMumberData">1:1</view>
+    </view>
+    <view class="gameMumberNun">
+      <view class="gameMumberData vs">VS</view>
+      <view class="gameMumberData counter">{{time}}</view>
+      <view class="gameMumberData type">比赛中</view>      
+    </view> 
+    <view class="gameMumberNun">
+      <view class="gameMumberData"><text class="memberId">1</text></view>      
+      <view class="gameMumberData">10%</view>  
+      <view class="gameMumberData">1:1</view>  
+    </view> 
+  </view>  
+  <view class="cathecticData">
+    <view class="cathecticTxt">
+      <text class="cathecticLeft">5人投注</text>
+      <text class="cathecticRight">2人投注</text>    
+    </view>
+    <view class="cathectic">
+      <view class="cathecticBarLeft" style="width:{{width}}%;"></view>
+      <view class="cathecticBarRight" style="width:{{width}}%;"></view>
+    </view>      
+  </view>           
+  <view class="cathecticTab">
+    <scroll-view scroll-y style="height: {{height}}px;">
+      <block>
+        <view class="cathecticList">
+          <view class="userinfo">
+            <image class="userinfo-avatar" src="../images/icon_active_homepage.png"></image>
+          </view>
+          <text>2号</text>
+          <text>100元</text>                      
+        </view>  
+      </block>
+    </scroll-view>
+  </view>
+   <view class="chooseWiner">
+    <radio-group bindchange="radioChange">
+      <label>
+        <radio value="{{item.name}}" checked="{{item.checked}}" />2号
+      </label> 
+      <label>
+        <radio value="{{item.name}}" checked="{{item.checked}}" />3号
+      </label> 
+    </radio-group>
+    <view class="winnerBtn" bindtap="confirmWinner">
+      <text>确定胜方</text>
+    </view>
+  </view> 
+   <view class="chooseWiner chooseWiner1" hidden="{{hide}}">
+    <radio-group>
+      <label bindchange="radioChangeNum">
+        <radio value="{{item.name}}" checked="{{item.checked}}" />2号
+      </label> 
+      <label>
+        <radio value="{{item.name}}" checked="{{item.checked}}" />3号
+      </label> 
+    </radio-group>
+    <radio-group>
+      <label bindchange="radioChangeMoney">
+        <radio value="{{item.name}}" checked="{{item.checked}}" />5
+      </label> 
+      <label>
+        <radio value="{{item.name}}" checked="{{item.checked}}" />10
+      </label> 
+    </radio-group>    
+    <view class="winnerBtn">
+      <text>投注</text>
+    </view>
+  </view> 
+</view>

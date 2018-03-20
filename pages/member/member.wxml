@@ -1,0 +1,28 @@
+<!--member.wxml-->
+<view class="container">
+  <text class="title">选择对局选手</text>
+  <view class="table">
+    <view class="tr">
+      <text class="th">选手</text>
+      <text class="th">对局总数</text>
+      <text class="th">抽成</text>
+      <text class="th">赔率</text>      
+    </view>
+    <scroll-view scroll-y style="height: {{height}}px;">
+      <checkbox-group bindchange="checkboxChange">
+        <label>
+          <view class="tr"> 
+            <checkbox value="{{item.name}}" checked="{{item.checked}}" disabled="{{disabled}}" />
+            <text class="td"><text class="memberId">1</text></text>
+            <text class="td">0/0局</text>
+            <text class="td">5%</text>
+            <text class="td">1:1</text>  
+          </view>  
+        </label> 
+      </checkbox-group>                                                 
+    </scroll-view>    
+  </view>
+  <view class="beginBtn" bindtap="begin">
+    <text>开始</text>
+  </view>
+</view>

@@ -1,0 +1,21 @@
+/**index.wxss**/
+.container{
+  position:fixed;
+  width: 100%;
+} 
+.beginBtn{
+  position: relative;
+  top: 50%;  
+  width: 326rpx;
+  height: 104rpx;
+  margin-top: -52rpx;  
+  border-radius: 6rpx;  
+  line-height: 104rpx;  
+  background-color: #fff;
+  text-align: center;
+}
+.beginBtn text{
+  font-size: 40rpx;
+  color: #7093eb;
+  font-weight: bold;  
+}
