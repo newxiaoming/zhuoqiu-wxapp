@@ -65,9 +65,13 @@
   width: 100%;
   height: 98rpx;
   line-height: 98rpx;  
+  border-radius: 0;
+  border: none;
   background-color: #f85656;
   text-align: center;
-}
-.shareBtn text{
+  font-size: 30rpx;
   color: #fff;
 }
+button::after {
+  border: 0;
+} 
