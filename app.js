@@ -1,19 +1,54 @@
+const zhushou = require('./utils/zhushou.js')
+
 //app.js
 App({
   globalData: {
     userInfo: null,
-    windowHeight: null
-  },  
+    windowHeight: null,
+    domainTest: 'http://zhuoqiuzhushou.test',
+    domainProduct : '',
+    env: 'debug',
+    gameplayers: []
+  }, 
+  /**
+   * 桌球助手API
+   */
+  zhushou: zhushou,
+   
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    // wx.setStorageSync('logs', logs)
     var that = this;
     // 登录
     wx.login({
-      success: res => {
+      success: function(res) {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: 'http://zhuoqiuzhushou.test/api/checkuser',
+            data: {
+              code: res.code
+            },
+            success: function(result){
+              wx.setStorageSync('isbanker', result.data.isbanker)
+              wx.setStorageSync('openid', result.data.id)
+              if (result.data.isbanker == 1) {
+                wx.redirectTo({
+                  url: '/pages/gameOn/gameOn'
+                })
+              }
+              // wx.setStorage({
+              //   key: 'isbanker',
+              //   data: result.data.isbanker,
+              // })
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
       }
     })
     // 获取用户信息

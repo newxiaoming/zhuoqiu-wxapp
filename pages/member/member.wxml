@@ -9,17 +9,19 @@
       <text class="th">赔率</text>      
     </view>
     <scroll-view scroll-y style="height: {{height}}px;">
+    
       <checkbox-group bindchange="checkboxChange">
-        <label>
+        <label wx:for="{{players}}" wx:for-item="player">
           <view class="tr"> 
-            <checkbox value="{{item.name}}" checked="{{item.checked}}" disabled="{{disabled}}" />
-            <text class="td"><text class="memberId">1</text></text>
+            <checkbox value="{{player.id}}" checked="{{item.checked}}" disabled="{{disabled}}" data-id="{{player.id}}"/>
+            <text class="td"><text class="memberId">{{player.id}}</text></text>
             <text class="td">0/0局</text>
-            <text class="td">5%</text>
-            <text class="td">1:1</text>  
+            <text class="td">{{player.brokerage}}%</text>
+            <text class="td">{{player.odds}}</text>  
           </view>  
         </label> 
-      </checkbox-group>                                                 
+      </checkbox-group>
+                                                      
     </scroll-view>    
   </view>
   <view class="beginBtn" bindtap="begin">

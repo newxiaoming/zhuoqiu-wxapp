@@ -5,6 +5,19 @@ Page({
   data: {
   },
   gameBegin: function() {
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
+    // wx.request({
+    //   url: 'http://zhuoqiuzhushou.test/api/players',
+    //   data: {
+
+    //   },
+    //   success: function(res) {
+    //     wx.setStorageSync('players', res.data.data)
+    //     wx.hideLoading()
+    //   }
+    // })
     wx.redirectTo({
       url: '../member/member'
     })

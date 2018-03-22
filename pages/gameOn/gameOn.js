@@ -7,16 +7,20 @@ Page({
     height: null,
     time: "00:00:00",
     width: "50",
-    seconds: 0,
+    seconds: 120,
     cost: 0,
-    hide: true    
+    hide: true,
+    ids: wx.getStorageSync('ids'),
+    gamers:[]
   },
   onLoad: function (options) {  
     timing(this);
     charging(this);
     this.setData({
       height: app.globalData.windowHeight - 320,
-    })    
+    })
+    this.getGamers()
+    console.log(app.globalData.gameplayers)    
   },
   radioChange: function(e){   
   },
@@ -27,6 +31,20 @@ Page({
     wx.redirectTo({
       url: '../gameOver/gameOver?timeOver=' + timeOver
     })   
+  },
+  getGamers:function(){
+    if (!wx.getStorageSync('gamers')) {
+      wx.showToast({
+        title: '比赛数据异常',
+        icon: 'none'
+      })
+      return
+    }
+    console.log(wx.getStorageSync('gamers'))
+    this.setData({
+      gamers : wx.getStorageSync('gamers')
+    })
+
   }
 })
 function timing(that) {
