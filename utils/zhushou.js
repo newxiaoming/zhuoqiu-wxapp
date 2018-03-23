@@ -1,5 +1,5 @@
-const LISTURL = 'http://zhuoqiuzhushou.test/api/players'
-const SUBMITURL = 'http://zhuoqiuzhushou.test/api/player/submitgame'
+const LISTURL = 'http://192.168.0.127:8088/api/players'
+const SUBMITURL = 'http://192.168.0.127:8088/api/player/submitgame'
 const fetch = require('./fetch')
 
 /**

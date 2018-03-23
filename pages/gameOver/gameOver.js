@@ -13,6 +13,7 @@ Page({
       height: app.globalData.windowHeight - 340,
       timeOver: options.timeOver    
     })
+    console.log(options._g)
     this.getGamers()
   },
   onShareAppMessage: function (res) {
@@ -21,8 +22,8 @@ Page({
       console.log(res.target)
     }
     return {
-      title: '�Զ���ת������',
-      path: '/page/gameOver/gameOver',
+      title: '桌球比赛结果',
+      path: '/page/gameOver/gameOver?_g=' + wx.getStorageSync('game_id'),
       success: function (res) {
         // ת���ɹ�
       },
