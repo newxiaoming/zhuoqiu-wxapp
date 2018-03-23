@@ -29,13 +29,13 @@
   </view>           
   <view class="cathecticTab">
     <scroll-view scroll-y style="height: {{height}}px;">
-      <block>
+      <block wx:for="{{beters}}" wx:for-item='beter'>
         <view class="cathecticList">
           <view class="userinfo">
             <image class="userinfo-avatar" src="../images/icon_active_homepage.png"></image>
           </view>
-          <text>2号</text>
-          <text>100元</text>                      
+          <text>{{beter.gamer}}号</text>
+          <text>{{beter.money}}元</text>                      
         </view>  
       </block>
     </scroll-view>
@@ -51,20 +51,20 @@
     </view>
   </view> 
    <view class="chooseWiner chooseWiner1" hidden="{{hide}}">
-    <radio-group>
-      <label bindchange="radioChangeNum"  wx:for='{{ids}}' wx:for-item='gamer'>
-        <radio value="{{gamer.id}}" checked="{{item.checked}}" />{{gamer.id}}号
+    <radio-group bindchange="radioChangeNum">
+      <label  wx:for='{{gamers}}' wx:for-item='gamer'>
+        <radio value="{{gamer.id}}" checked="" />{{gamer.id}}号
       </label>      
     </radio-group>
-    <radio-group>
-      <label bindchange="radioChangeMoney">
-        <radio value="{{item.name}}" checked="{{item.checked}}" />5
+    <radio-group bindchange="radioChangeMoney">
+      <label >
+        <radio value="5" checked="" />5
       </label> 
       <label>
-        <radio value="{{item.name}}" checked="{{item.checked}}" />10
+        <radio value="10" checked="" />10
       </label> 
     </radio-group>    
-    <view class="winnerBtn">
+    <view class="winnerBtn" bindtap='submitBet'>
       <text>投注</text>
     </view>
   </view> 

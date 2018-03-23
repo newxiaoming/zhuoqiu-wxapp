@@ -28,7 +28,7 @@ App({
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: 'http://zhuoqiuzhushou.test/api/checkuser',
+            url: 'http://192.168.0.127:8088/api/checkuser',
             data: {
               code: res.code
             },
