@@ -50,7 +50,5 @@
       </block>
     </scroll-view>
   </view>
-  <view class="shareBtn">
-    <text>分享结果</text>
-  </view>
+  <button class="shareBtn" open-type="share">分享结果</button>
 </view>

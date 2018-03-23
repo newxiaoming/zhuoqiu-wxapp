@@ -5,7 +5,8 @@ Page({
     height:null,
     players: [],//所有选手列表
     ids: [],
-    list: []
+    list: [],
+    scrollTop: 0
   },
   onLoad: function (options) {
     this.setData({
@@ -27,6 +28,10 @@ Page({
     //   }
     // })
     
+  },
+  onShow: function () {
+    var that = this;
+    GetList(that);
   },
   checkboxChange: function (e) {
     var list = []; 
@@ -143,5 +148,36 @@ Page({
         console.error(e)
         wx.hideLoading()
       })
+  },
+  onPullDownRefresh: function () {
+    wx.showNavigationBarLoading();
+    var that = this;
+    wx.request({
+      url: 'http://192.168.0.127:8088/api/players',
+      data: {},
+      method: 'GET',
+      success: function (res) {
+        that.setData({
+          players: res.data.data,
+          scrollTop: that.data.scrollTop
+        })
+        setTimeout(function () {
+          wx.hideNavigationBarLoading()
+          wx.stopPullDownRefresh()
+        }, 1000);
+      }
+    })
   }
 })
+var GetList = function (that) {
+  wx.request({
+    url: 'http://192.168.0.127:8088/api/players',
+    data: {},
+    method: 'GET',
+    success: function (res) {
+      that.setData({
+        players: res.data.data
+      })
+    }
+  })
+}
