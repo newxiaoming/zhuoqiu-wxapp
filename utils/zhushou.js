@@ -30,8 +30,8 @@ function find(apiurl = LISTURL,count = '', id = '') {
 /**
  * 提交数据
  */
-function submitgame(ids= '', banker_openid = '', is_end=0, winner= 0) {
-  const params = { ids: ids,bk: banker_openid , _t:is_end , _w : winner }
+function submitgame(ids= '', banker_openid = '', is_end=0, winner= 0, game_id = 0) {
+  const params = { ids: ids,bk: banker_openid , _t:is_end , _w : winner, _g : game_id }
   return fetchApi(SUBMITURL, params)
     .then(res => res.data)
 }

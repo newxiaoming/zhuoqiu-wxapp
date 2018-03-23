@@ -63,7 +63,7 @@ Page({
 
     wx.showLoading({ title: '拼命提交中...', mask: true })
 
-    return app.zhushou.submitgame(this.data.ids, wx.getStorageSync('openid'), 1, this.data.winner)
+    return app.zhushou.submitgame(this.data.ids, wx.getStorageSync('openid'), 1, this.data.winner, wx.getStorageSync('game_id'))
       .then(d => {
         console.log(d.status)
         if (d.status) {

@@ -5,28 +5,45 @@ Page({
     height: null,
     src: "../images/icon_crown_fourthpage.png",
     isHide: false,
-    width: "50"    
+    width: "50" ,
+    gamers: []   
   },
   onLoad: function (options) {
     this.setData({
       height: app.globalData.windowHeight - 340,
       timeOver: options.timeOver    
     })
+    this.getGamers()
   },
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
-      // 来自页面内转发按钮
+      // 锟斤拷锟斤拷页锟斤拷锟斤拷转锟斤拷锟斤拷钮
       console.log(res.target)
     }
     return {
-      title: '自定义转发标题',
+      title: '锟皆讹拷锟斤拷转锟斤拷锟斤拷锟斤拷',
       path: '/page/gameOver/gameOver',
       success: function (res) {
-        // 转发成功
+        // 转锟斤拷锟缴癸拷
       },
       fail: function (res) {
-        // 转发失败
+        // 转锟斤拷失锟斤拷
       }
     }
-  }  
+  },
+  getGamers: function () {
+    console.log('getgamers')
+    if (!wx.getStorageSync('gamers')) {
+      wx.showToast({
+        title: '姣旇禌鏁版嵁寮傚父',
+        icon: 'none'
+      })
+      return
+    }
+
+    this.setData({
+      gamers: wx.getStorageSync('gamers')
+    })
+
+  },  
 })
