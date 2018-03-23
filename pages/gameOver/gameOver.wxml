@@ -4,11 +4,11 @@
     <view class="gameMumberNun">
       <view class="gameMumberData">
         <image class="win" src="{{src}}"></image>
-        <text class="memberId">1</text>
+        <text class="memberId">{{gamers[0]['id']}}</text>
       </view>
-      <view class="gameMumberData">10%</view>
-      <view class="gameMumberData">1:1</view>
-      <view class="income" hidden='{{isHide}}'>收入40元</view>         
+      <view class="gameMumberData">{{gamers[0]['brokerage']}}%</view>
+      <view class="gameMumberData">{{gamers[1]['odds']}}</view>
+      <view class="income" hidden='{{isHide}}'>收入-元</view>         
     </view>
     <view class="gameMumberNun">
       <view class="gameMumberData vs">VS</view>
@@ -18,11 +18,11 @@
     <view class="gameMumberNun">
       <view class="gameMumberData">
         <image class="win" src=""></image>
-        <text class="memberId">1</text>
+        <text class="memberId">{{gamers[1]['id']}}</text>
       </view>    
-      <view class="gameMumberData">10%</view>  
-      <view class="gameMumberData">1:1</view> 
-      <view class="income" hidden='{{!isHide}}'>收入40元</view>        
+      <view class="gameMumberData">{{gamers[1]['brokerage']}}%</view>  
+      <view class="gameMumberData">{{gamers[1]['odds']}}</view> 
+      <view class="income" hidden='{{!isHide}}'>收入-元</view>        
     </view> 
   </view>  
   <view class="cathecticData">

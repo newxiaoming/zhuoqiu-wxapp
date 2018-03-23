@@ -11,7 +11,8 @@ Page({
     cost: 0,
     hide: true,
     ids: wx.getStorageSync('ids'),
-    gamers:[]
+    gamers:[],
+    winner:0
   },
   onLoad: function (options) {  
     timing(this);
@@ -22,15 +23,19 @@ Page({
     this.getGamers()
     console.log(app.globalData.gameplayers)    
   },
-  radioChange: function(e){   
+  radioChange: function(e){
+    this.setData({
+      winner: e.detail.value
+    })   
   },
   confirmWinner: function(e){
-    var that = this;
-    clearTimeout(t);
-    var timeOver = that.data.time
-    wx.redirectTo({
-      url: '../gameOver/gameOver?timeOver=' + timeOver
-    })   
+    this.gameOver()
+    // var that = this;
+    // clearTimeout(t);
+    // var timeOver = that.data.time
+    // wx.redirectTo({
+    //   url: '../gameOver/gameOver?timeOver=' + timeOver
+    // })   
   },
   getGamers:function(){
     if (!wx.getStorageSync('gamers')) {
@@ -40,11 +45,52 @@ Page({
       })
       return
     }
-    console.log(wx.getStorageSync('gamers'))
+    
     this.setData({
       gamers : wx.getStorageSync('gamers')
     })
 
+  },
+
+  gameOver:function() {
+
+    if (!this.data.winner) {
+      wx.showToast({
+        title: '比赛数据异常',
+        icon: 'none'
+      })
+    }
+
+    wx.showLoading({ title: '拼命提交中...', mask: true })
+
+    return app.zhushou.submitgame(this.data.ids, wx.getStorageSync('openid'), 1, this.data.winner, wx.getStorageSync('game_id'))
+      .then(d => {
+        console.log(d.status)
+        if (d.status) {
+          // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
+          wx.setStorageSync('players', d.data)
+          this.setData({
+            players: d.data
+          })
+          var that = this;
+          clearTimeout(t);
+          var timeOver = that.data.time
+          wx.redirectTo({
+            url: '../gameOver/gameOver?timeOver=' + timeOver
+          })
+        } else {
+          wx.showToast({
+            title: '数据异常 或 没啥选手',
+            icon: 'none'
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
   }
 })
 function timing(that) {

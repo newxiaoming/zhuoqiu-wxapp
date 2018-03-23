@@ -14,7 +14,7 @@ App({
    * 桌球助手API
    */
   zhushou: zhushou,
-   
+
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -36,6 +36,7 @@ App({
               wx.setStorageSync('isbanker', result.data.isbanker)
               wx.setStorageSync('openid', result.data.id)
               if (result.data.isbanker == 1) {
+                wx.setStorageSync('game_id', result.data.game_id)
                 wx.redirectTo({
                   url: '/pages/gameOn/gameOn'
                 })

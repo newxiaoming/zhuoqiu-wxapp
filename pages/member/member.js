@@ -129,6 +129,7 @@ Page({
         if (d.status) {
           // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
           wx.setStorageSync('players', d.data)
+          wx.setStorageSync('game_id', d.game_id)//game_id: 游戏ID
           this.setData({
             players: d.data
           })
