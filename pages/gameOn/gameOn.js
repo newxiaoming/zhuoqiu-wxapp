@@ -9,10 +9,14 @@ Page({
     width: "50",
     seconds: 120,
     cost: 0,
-    hide: true,
+    hide: false,// 庄家 或 投注者 开关
     ids: wx.getStorageSync('ids'),
-    gamers:[],
-    winner:0
+    gamers:[],//参赛选手
+    winner:0, //庄家提交的胜利者
+    set_winner : 0, //投注的选手
+    money:0, //投注金额
+    hasbet: false,//是否已投注
+    beters: [],//投注数据
   },
   onLoad: function (options) {  
     timing(this);
@@ -21,6 +25,7 @@ Page({
       height: app.globalData.windowHeight - 320,
     })
     this.getGamers()
+    this.getBeters()
     console.log(app.globalData.gameplayers)    
   },
   radioChange: function(e){
@@ -82,6 +87,91 @@ Page({
           wx.showToast({
             title: '数据异常 或 没啥选手',
             icon: 'none'
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  },
+  //投注选手
+  radioChangeNum: function(e) {
+    console.log('radio发生change事件，携带value值为：', e.detail.value)
+    this.setData({
+      set_winner : e.detail.value,
+    })
+  },
+  //投注金额
+  radioChangeMoney: function (e) {
+    this.setData({
+      money: e.detail.value,
+    })
+    console.log(e.detail.value)
+  },
+  //投注
+  submitBet: function() {
+    if (!wx.getStorageSync('game_id') || !this.data.money || !this.data.set_winner)
+    {
+      wx.showToast({
+        title: '要选投注的选手呀！',
+        icon: 'none',
+        mask: true
+      })
+      return
+    }
+    return app.zhushou.submitBet(wx.getStorageSync('openid'), this.data.set_winner, wx.getStorageSync('game_id'), this.data.money)
+      .then(d => {
+        console.log(d.count)
+        if (d.status) {
+          // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
+          
+          this.setData({
+            hasbet: true
+          })
+
+          wx.showToast({
+            title: '投注成功',
+            icon: 'none'
+          })
+          
+          wx.redirectTo({
+            url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+          })
+
+        } else {
+          wx.showToast({
+            title: '没有投注成功',
+            icon: 'none'
+          })
+          return
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  },
+  //获取投注数据
+  getBeters: function () {
+    return app.zhushou.getBet(wx.getStorageSync('game_id'))
+      .then(d => {
+
+        if (d.status == 200) {
+
+          this.setData({
+            beters: d.data
+          })
+
+        } else {
+          wx.showToast({
+            title: '投注数据异常',
+            icon: 'none',
+            mask: true
           })
         }
         wx.hideLoading()

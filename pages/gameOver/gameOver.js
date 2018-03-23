@@ -6,7 +6,8 @@ Page({
     src: "../images/icon_crown_fourthpage.png",
     isHide: false,
     width: "50" ,
-    gamers: []   
+    gamers: [] ,
+    beters: [],//投注数据  
   },
   onLoad: function (options) {
     this.setData({
@@ -47,4 +48,29 @@ Page({
     })
 
   },  
+  getBeters: function(){
+    return app.zhushou.getBet(wx.getStorageSync('game_id'))
+      .then(d => {
+        
+        if (d.status == 200) {
+
+          this.setData({
+            beters: d.data
+          })
+          
+        } else {
+          wx.showToast({
+            title: '投注数据异常',
+            icon: 'none',
+            mask: true
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  }
 })

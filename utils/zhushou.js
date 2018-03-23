@@ -1,10 +1,10 @@
 const LISTURL = 'http://192.168.0.127:8088/api/players'
 const SUBMITURL = 'http://192.168.0.127:8088/api/player/submitgame'
+const SUBMITBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/submitbet'
+const GETBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/getbet'
 const fetch = require('./fetch')
 
 /**
- * 抓取豆瓣电影特定类型的API
- * https://developers.douban.com/wiki/?title=movie_v2
  * @param  {String} type   类型，例如：'coming_soon'
  * @param  {Objece} params 参数
  * @return {Promise}       包含抓取任务的Promise
@@ -37,6 +37,28 @@ function submitgame(ids= '', banker_openid = '', is_end=0, winner= 0, game_id = 
 }
 
 /**
+ * 提交投注
+ * user 投注人微信openid
+ * gamer 投注的选手ID
+ * game_id  游戏ID
+ */
+function submitBet(user = '', gamer = 0, game_id = 0, money= 0) {
+  const params = { user: user, gamer: gamer, _g: game_id, _m :money }
+  return fetchApi(SUBMITBETURL, params)
+    .then(res => res.data)
+}
+
+/**
+ * 获取投注
+ * game_id  游戏ID
+ */
+function getBet(game_id = 0) {
+  const params = { _g: game_id }
+  return fetchApi(GETBETURL, params)
+    .then(res => res.data)
+}
+
+/**
  * 获取单条类型的数据
  * @param  {Number} id     电影ID
  * @return {Promise}       包含抓取任务的Promise
@@ -46,4 +68,4 @@ function findOne(id) {
     .then(res => res.data)
 }
 
-module.exports = { find, findOne, submitgame }
+module.exports = { find, findOne, submitgame, submitBet , getBet}
