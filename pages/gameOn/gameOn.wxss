@@ -21,16 +21,19 @@
 }
 .chooseWiner label{
   margin-right: 52rpx;
-  font-size: 34rpx;
+  font-size: 30rpx;
   vertical-align: middle;
 }
 .chooseWiner1 label{
-  padding: 0 12rpx;   
+  padding: 0 6rpx;   
   margin-right: 0;
 }
 .chooseWiner1 radio-group{
   border-right: 1px solid #ddd;
   padding: 0 12rpx;
+}
+.chooseWiner1 radio-group:nth-child(2){
+  border-right: 0;
 }
 radio .wx-radio-input{
   width: 32rpx;
