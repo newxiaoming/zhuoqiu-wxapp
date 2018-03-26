@@ -8,7 +8,8 @@ App({
     domainTest: 'http://zhuoqiuzhushou.test',
     domainProduct : '',
     env: 'debug',
-    gameplayers: []
+    gameplayers: [],
+    count: [],//投注数量,
   }, 
   /**
    * 桌球助手API
@@ -26,27 +27,57 @@ App({
       success: function(res) {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: 'http://192.168.0.127:8088/api/checkuser',
-            data: {
-              code: res.code
-            },
-            success: function(result){
-              wx.setStorageSync('isbanker', result.data.isbanker)
-              wx.setStorageSync('openid', result.data.id)
-              if (result.data.isbanker == 1) {
-                wx.setStorageSync('game_id', result.data.game_id)
-                wx.redirectTo({
-                  url: '/pages/gameOn/gameOn'
-                })
-              }
-              // wx.setStorage({
-              //   key: 'isbanker',
-              //   data: result.data.isbanker,
-              // })
+          wx.getUserInfo({
+            success: function (request) {
+              //发起网络请求
+              wx.request({
+                url: 'http://192.168.0.127:8088/api/checkuser',
+                method: "POST",
+                data: {
+                  code: res.code,
+                  rawData: request.rawData,
+                  signature: request.signature,
+                  encryptData: request.encryptedData,
+                  iv: request.iv
+                },
+                success: function (r) {
+                  wx.setStorageSync('isbanker', r.data.isbanker)
+                  wx.setStorageSync('openid', r.data.id)
+                  if (r.data.isbanker == 1) {
+                    wx.setStorageSync('game_id', r.data.game_id)
+                    wx.redirectTo({
+                      url: '/pages/gameOn/gameOn'
+                    })
+                  }
+                }
+              })
             }
           })
+          // //发起网络请求
+          // wx.request({
+          //   url: 'http://192.168.0.127:8088/api/checkuser',
+          //   data: {
+          //     code: res.code,
+          //     rawData: request.rawData,
+          //     signature: request.signature,
+          //     encryptData: request.encryptedData,
+          //     iv: request.iv
+          //   },
+          //   success: function(result){
+          //     wx.setStorageSync('isbanker', result.data.isbanker)
+          //     wx.setStorageSync('openid', result.data.id)
+          //     if (result.data.isbanker == 1) {
+          //       wx.setStorageSync('game_id', result.data.game_id)
+          //       wx.redirectTo({
+          //         url: '/pages/gameOn/gameOn'
+          //       })
+          //     }
+          //     // wx.setStorage({
+          //     //   key: 'isbanker',
+          //     //   data: result.data.isbanker,
+          //     // })
+          //   }
+          // })
         } else {
           console.log('登录失败！' + res.errMsg)
         }
@@ -61,7 +92,6 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {

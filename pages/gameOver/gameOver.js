@@ -7,7 +7,10 @@ Page({
     isHide: false,
     width: "50" ,
     gamers: [] ,
-    beters: [],//投注数据  
+    beters: [],//投注数据 
+    count: [],
+    winner: '',
+    income:0,//胜方收入
   },
   onLoad: function (options) {
     this.setData({
@@ -16,20 +19,21 @@ Page({
     })
     console.log(options._g)
     this.getGamers()
+    this.getWinner()
   },
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
-      // ����ҳ����ת����ť
+      // 分享
       console.log(res.target)
     }
     return {
       title: '桌球比赛结果',
       path: '/page/gameOver/gameOver?_g=' + wx.getStorageSync('game_id'),
       success: function (res) {
-        // ת���ɹ�
+        // 分享成功
       },
       fail: function (res) {
-        // ת��ʧ��
+        // 分享失败
       }
     }
   },
@@ -49,18 +53,47 @@ Page({
 
   },  
   getBeters: function(){
-    return app.zhushou.getBet(wx.getStorageSync('game_id'))
+    return app.zhushou.getBet(wx.getStorageSync('game_id'), '', wx.getStorageSync('openid'))
       .then(d => {
         
         if (d.status == 200) {
 
           this.setData({
-            beters: d.data
+            beters: d.data,
+            count:d.count
           })
-          
+          console.log(d.count)
         } else {
           wx.showToast({
             title: '投注数据异常',
+            icon: 'none',
+            mask: true
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  },
+  getWinner: function () {
+    return app.zhushou.getWinner(wx.getStorageSync('game_id'), '', wx.getStorageSync('openid'))
+      .then(d => {
+
+        if (d.status == 200) {
+
+          this.setData({
+            beters: d.data,
+            count: d.count,
+            winner: d.winner,
+            income: d.income
+          })
+          console.log(d.beters)
+        } else {
+          wx.showToast({
+            title: '比赛结果数据异常',
             icon: 'none',
             mask: true
           })

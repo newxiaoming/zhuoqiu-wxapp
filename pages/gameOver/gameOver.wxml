@@ -3,12 +3,14 @@
   <view class="gameMumber">
     <view class="gameMumberNun">
       <view class="gameMumberData">
-        <image class="win" src="{{src}}"></image>
+        <view wx:if="{{winner === gamers[0]['id']}}"> <image class="win" src="{{src}}" ></image> </view>
         <text class="memberId">{{gamers[0]['id']}}</text>
       </view>
       <view class="gameMumberData">{{gamers[0]['brokerage']}}%</view>
       <view class="gameMumberData">{{gamers[1]['odds']}}</view>
-      <view class="income" hidden='{{isHide}}'>收入-元</view>         
+      <view wx:if="{{winner === gamers[0]['id']}}"> 
+        <view class="income">收入{{income}}元</view>  
+      </view>       
     </view>
     <view class="gameMumberNun">
       <view class="gameMumberData vs">VS</view>
@@ -17,18 +19,21 @@
     </view> 
     <view class="gameMumberNun">
       <view class="gameMumberData">
-        <image class="win" src=""></image>
+        <view wx:if="{{winner === gamers[1]['id']}}"> <image class="win" src="{{src}}" ></image> </view>
+        
         <text class="memberId">{{gamers[1]['id']}}</text>
       </view>    
       <view class="gameMumberData">{{gamers[1]['brokerage']}}%</view>  
       <view class="gameMumberData">{{gamers[1]['odds']}}</view> 
-      <view class="income" hidden='{{!isHide}}'>收入-元</view>        
+      <view wx:if="{{winner === gamers[1]['id']}}"> 
+        <view class="income">收入{{income}}元</view>  
+      </view>        
     </view> 
   </view>  
   <view class="cathecticData">
     <view class="cathecticTxt">
-      <text class="cathecticLeft">5人投注</text>
-      <text class="cathecticRight">2人投注</text>    
+      <text class="cathecticLeft">{{count.a}}人投注</text>
+      <text class="cathecticRight">{{count.b}}人投注</text>    
     </view>
     <view class="cathectic">
       <view class="cathecticBarLeft" style="width:{{width}}%;"></view>
@@ -37,15 +42,15 @@
   </view>             
   <view class="cathecticTab">
     <scroll-view scroll-y style="height: {{height}}px;">
-      <block>
+      <block wx:for="{{beters}}" wx:for-item='beter'>
         <view class="cathecticList">
           <view class="userinfo">
-            <image class="userinfo-avatar" src="../images/icon_active_homepage.png"></image>
+            <image class="userinfo-avatar" src="{{beter.avatarUrl}}"></image>
           </view>
-          <text>2号</text>
-          <text>100元</text> 
-          <text class="gatherAmount">收入<text>40</text>元</text>
-          <text class="gatherAmount">应收<text>38</text>元</text>                           
+          <text>{{beter.gamer}}号</text>
+          <text>{{beter.money}}元</text> 
+          <text class="gatherAmount">收入<text>{{beter.revenue}}</text>元</text>
+          <text class="gatherAmount">应收<text>{{beter.income}}</text>元</text>                           
         </view>
       </block>
     </scroll-view>

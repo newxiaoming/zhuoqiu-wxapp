@@ -9,7 +9,8 @@ Page({
     width: "50",
     seconds: 120,
     cost: 0,
-    hide: false,// 庄家 或 投注者 开关
+    hide: false,// 投注者 开关
+    hidechooseWiner: true,// 庄家开关
     ids: wx.getStorageSync('ids'),
     gamers:[],//参赛选手
     winner:0, //庄家提交的胜利者
@@ -17,6 +18,7 @@ Page({
     money:0, //投注金额
     hasbet: false,//是否已投注
     beters: [],//投注数据
+    // count:[],//投注数量
   },
   onLoad: function (options) {  
     timing(this);
@@ -26,7 +28,7 @@ Page({
     })
     this.getGamers()
     this.getBeters()
-    console.log(app.globalData.gameplayers)    
+        
   },
   radioChange: function(e){
     this.setData({
@@ -122,14 +124,15 @@ Page({
       })
       return
     }
-    return app.zhushou.submitBet(wx.getStorageSync('openid'), this.data.set_winner, wx.getStorageSync('game_id'), this.data.money)
+    return app.zhushou.submitBet(wx.getStorageSync('openid'), this.data.set_winner, wx.getStorageSync('game_id'), this.data.money, app.globalData.userInfo.avatarUrl)
       .then(d => {
         console.log(d.count)
         if (d.status) {
           // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
           
           this.setData({
-            hasbet: true
+            hasbet: true,
+            hide: true
           })
 
           wx.showToast({
@@ -137,9 +140,9 @@ Page({
             icon: 'none'
           })
           
-          wx.redirectTo({
-            url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
-          })
+          // wx.redirectTo({
+          //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+          // })
 
         } else {
           wx.showToast({
@@ -158,18 +161,81 @@ Page({
   },
   //获取投注数据
   getBeters: function () {
-    return app.zhushou.getBet(wx.getStorageSync('game_id'))
+    return app.zhushou.getBet(wx.getStorageSync('game_id'), this.data.ids, wx.getStorageSync('openid'))
       .then(d => {
-
+      
         if (d.status == 200) {
 
           this.setData({
-            beters: d.data
+            beters: d.data,
+            count: d.count
           })
+          
+          if(d.isbet==1)
+          {
+            this.setData({
+              // hide: true
+            })
+            // wx.redirectTo({
+            //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+            // })
+          }
+          if(d.isbet)
+          {
+            this.setData({
+              hide: true
+            })
+          }
+          
+          
+        } else {
+          wx.showToast({
+            title: '暂无人投注',
+            icon: 'none',
+            mask: true
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  },
+  //获取投注数据
+  onPullDownRefresh: function () {
+
+    wx.showNavigationBarLoading();
+    return app.zhushou.getBet(wx.getStorageSync('game_id'), this.data.ids, wx.getStorageSync('openid'))
+      .then(d => {
+        setTimeout(function () {
+          wx.hideNavigationBarLoading()
+          wx.stopPullDownRefresh()
+        }, 1000);
+        if (d.status == 200) {
+
+          this.setData({
+            beters: d.data,
+            count: d.count
+          })
+
+          if (d.isbet == 1) {
+            // wx.redirectTo({
+            //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+            // })
+          }
+
+          console.log(d.isfinish)
+          if (d.isfinish == 1) {
+            wx.redirectTo({
+              url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+            })
+          } 
 
         } else {
           wx.showToast({
-            title: '投注数据异常',
+            title: '暂无人投注',
             icon: 'none',
             mask: true
           })

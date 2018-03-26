@@ -2,6 +2,7 @@ const LISTURL = 'http://192.168.0.127:8088/api/players'
 const SUBMITURL = 'http://192.168.0.127:8088/api/player/submitgame'
 const SUBMITBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/submitbet'
 const GETBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/getbet'
+const GETWINNERURL = 'http://192.168.0.127:8088/api/zhuqiugame/getbetresult'
 const fetch = require('./fetch')
 
 /**
@@ -42,8 +43,8 @@ function submitgame(ids= '', banker_openid = '', is_end=0, winner= 0, game_id = 
  * gamer 投注的选手ID
  * game_id  游戏ID
  */
-function submitBet(user = '', gamer = 0, game_id = 0, money= 0) {
-  const params = { user: user, gamer: gamer, _g: game_id, _m :money }
+function submitBet(user = '', gamer = 0, game_id = 0, money = 0, avatarUrl = '') {
+  const params = { user: user, gamer: gamer, _g: game_id, _m: money, avatarUrl: avatarUrl}
   return fetchApi(SUBMITBETURL, params)
     .then(res => res.data)
 }
@@ -52,12 +53,21 @@ function submitBet(user = '', gamer = 0, game_id = 0, money= 0) {
  * 获取投注
  * game_id  游戏ID
  */
-function getBet(game_id = 0) {
-  const params = { _g: game_id }
+function getBet(game_id = 0,ids,openid) {
+  const params = { _g: game_id, ids:ids,_id: openid }
   return fetchApi(GETBETURL, params)
     .then(res => res.data)
 }
 
+/**
+ * 胜方
+ * game_id  游戏ID
+ */
+function getWinner(game_id = 0, openid) {
+  const params = { _g: game_id, _id: openid }
+  return fetchApi(GETWINNERURL, params)
+    .then(res => res.data)
+}
 /**
  * 获取单条类型的数据
  * @param  {Number} id     电影ID
@@ -68,4 +78,4 @@ function findOne(id) {
     .then(res => res.data)
 }
 
-module.exports = { find, findOne, submitgame, submitBet , getBet}
+module.exports = { find, findOne, submitgame, submitBet, getBet, getWinner}
