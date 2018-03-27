@@ -8,7 +8,7 @@ Page({
     width: "50" ,
     gamers: [] ,
     beters: [],//投注数据 
-    count: [],
+    count: {a:0,b:0},
     winner: '',
     income:0,//胜方收入
   },
@@ -17,7 +17,7 @@ Page({
       height: app.globalData.windowHeight - 340,
       timeOver: options.timeOver    
     })
-    console.log(options._g)
+    
     this.getGamers()
     this.getWinner()
   },

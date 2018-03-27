@@ -1,9 +1,13 @@
-const LISTURL = 'http://192.168.0.127:8088/api/players'
-const SUBMITURL = 'http://192.168.0.127:8088/api/player/submitgame'
-const SUBMITBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/submitbet'
-const GETBETURL = 'http://192.168.0.127:8088/api/zhuqiugame/getbet'
-const GETWINNERURL = 'http://192.168.0.127:8088/api/zhuqiugame/getbetresult'
+const DOMAIN = 'http://x.tfcaijing.com/index.php'
+const LISTURL = DOMAIN + '/api/players'
+const SUBMITURL = DOMAIN + '/api/player/submitgame'
+const SUBMITBETURL = DOMAIN + '/api/zhuqiugame/submitbet'
+const GETBETURL = DOMAIN + '/api/zhuqiugame/getbet'
+const GETWINNERURL = DOMAIN + '/api/zhuqiugame/getbetresult'
+const CHECKUSER = DOMAIN + '/api/checkuser'
+const GETGAMERS = DOMAIN + '/api/zhuoqiugame/getgamers'
 const fetch = require('./fetch')
+const fetchpost = require('./fetchpost')
 
 /**
  * @param  {String} type   类型，例如：'coming_soon'
@@ -12,6 +16,15 @@ const fetch = require('./fetch')
  */
 function fetchApi(url = LISTURL,params) {
   return fetch(url,params)
+}
+
+/**
+ * @param  {String} type   类型，POST
+ * @param  {Objece} params 参数
+ * @return {Promise}       包含抓取任务的Promise
+ */
+function fetchApiPost(url = LISTURL, params) {
+  return fetchpost(url, params)
 }
 
 /**
@@ -68,6 +81,27 @@ function getWinner(game_id = 0, openid) {
   return fetchApi(GETWINNERURL, params)
     .then(res => res.data)
 }
+
+/**
+ * 检查用户
+ */
+function checkuser(code, rawData, signature,encryptData,iv)
+{
+  const params = { code: code, rawData: rawData, signature: signature,encryptData:encryptData, iv:iv }
+  return fetchApiPost(CHECKUSER, params)
+    .then(res => res.data)
+}
+
+/**
+ * 选手
+ * game_id  游戏ID
+ */
+function getGamers(game_id = 0,) {
+  const params = { _g: game_id }
+  return fetchApi(GETGAMERS, params)
+    .then(res => res.data)
+}
+
 /**
  * 获取单条类型的数据
  * @param  {Number} id     电影ID
@@ -78,4 +112,4 @@ function findOne(id) {
     .then(res => res.data)
 }
 
-module.exports = { find, findOne, submitgame, submitBet, getBet, getWinner}
+module.exports = { find, findOne, submitgame, submitBet, getBet, getWinner, checkuser, getGamers}

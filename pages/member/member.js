@@ -154,7 +154,7 @@ Page({
     wx.showNavigationBarLoading();
     var that = this;
     wx.request({
-      url: 'http://192.168.0.127:8088/api/players',
+      url: DOMAIN + '/api/players',
       data: {},
       method: 'GET',
       success: function (res) {
@@ -172,7 +172,7 @@ Page({
 })
 var GetList = function (that) {
   wx.request({
-    url: 'http://192.168.0.127:8088/api/players',
+    url: 'https://x.tfcaijing.com/index.php/api/players',
     data: {},
     method: 'GET',
     success: function (res) {

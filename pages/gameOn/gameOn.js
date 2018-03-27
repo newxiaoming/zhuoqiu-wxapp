@@ -9,8 +9,8 @@ Page({
     width: "50",
     seconds: 120,
     cost: 0,
-    hide: false,// 投注者 开关
-    hidechooseWiner: true,// 庄家开关
+    hide: false,// 投注者 开关,false 不隐藏，true 隐藏
+    hidechooseWiner: true,// 庄家开关，false 不隐藏，true 隐藏
     ids: wx.getStorageSync('ids'),
     gamers:[],//参赛选手
     winner:0, //庄家提交的胜利者
@@ -18,7 +18,7 @@ Page({
     money:0, //投注金额
     hasbet: false,//是否已投注
     beters: [],//投注数据
-    // count:[],//投注数量
+    count:{a:0,b:0},//投注数量
   },
   onLoad: function (options) {  
     timing(this);
@@ -26,6 +26,7 @@ Page({
     this.setData({
       height: app.globalData.windowHeight - 320,
     })
+    console.log(options._g)
     this.getGamers()
     this.getBeters()
         
@@ -45,13 +46,40 @@ Page({
     // })   
   },
   getGamers:function(){
-    if (!wx.getStorageSync('gamers')) {
-      wx.showToast({
-        title: '比赛数据异常',
-        icon: 'none'
-      })
-      return
-    }
+    
+    wx.showLoading({ title: '拼命拉取数据...', mask: true })
+      return app.zhushou.getGamers( wx.getStorageSync('game_id'))
+        .then(d => {
+          if (wx.getStorageSync('isbanker') === 1) {
+            
+            this.setData({
+              hidechooseWiner: false,
+              hide: true
+            })
+          }
+
+          if (d.status) {
+            
+            wx.setStorageSync('gamers', d.data)
+            this.setData({
+              gamers: d.data
+            })
+
+            
+          } else {
+            wx.showToast({
+              title: '数据异常',
+              icon: 'none'
+            })
+          }
+          wx.hideLoading()
+        })
+        .catch(e => {
+          this.setData({ subtitle: '获取数据异常' })
+          console.error(e)
+          wx.hideLoading()
+        })
+    
     
     this.setData({
       gamers : wx.getStorageSync('gamers')
@@ -174,18 +202,14 @@ Page({
           if(d.isbet==1)
           {
             this.setData({
-              // hide: true
+              hide: true,
+              hidechooseWiner: false
             })
             // wx.redirectTo({
             //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
             // })
           }
-          if(d.isbet)
-          {
-            this.setData({
-              hide: true
-            })
-          }
+          
           
           
         } else {
@@ -247,7 +271,23 @@ Page({
         console.error(e)
         wx.hideLoading()
       })
-  }
+  },
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 分享
+      console.log(res.target)
+    }
+    return {
+      title: '桌球比赛结果',
+      path: '/page/gameOn/gameOn?_g=' + wx.getStorageSync('game_id'),
+      success: function (res) {
+        // 分享成功
+      },
+      fail: function (res) {
+        // 分享失败
+      }
+    }
+  },
 })
 function timing(that) {
   var seconds = that.data.seconds;

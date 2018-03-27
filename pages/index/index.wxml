@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container" style="background:url(../images/icon_bj_firstpage.jpg) no-repeat;background-size: 100% 100%;">
+<view class="container" style="background:url(http://x.tfcaijing.com/assets/images/icon_bj_firstpage.jpg) no-repeat;background-size: 100% 100%;">
   <view class="beginBtn" bindtap="gameBegin">
     <text>开局</text>
   </view>
