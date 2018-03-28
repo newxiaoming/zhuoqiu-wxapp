@@ -15,7 +15,7 @@
           <view class="tr"> 
             <checkbox value="{{player.id}}" checked="{{item.checked}}" disabled="{{disabled}}" data-id="{{player.id}}"/>
             <text class="td"><text class="memberId">{{player.id}}</text></text>
-            <text class="td">0/0局</text>
+            <text class="td">{{player.victory}}/{{player.total}}局</text>
             <text class="td">{{player.brokerage}}%</text>
             <text class="td">{{player.odds}}</text>  
           </view>  

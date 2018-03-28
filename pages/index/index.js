@@ -26,20 +26,25 @@ Page({
                   
                   wx.setStorageSync('isbanker', r.isbanker)
                   wx.setStorageSync('openid', r.id)
-                  if (r.isbanker == 1) {
-                    wx.setStorageSync('game_id', r.game_id)
+                  if(r.game_id){
+                    if (r.isbanker == 1) {
+                      wx.setStorageSync('game_id', r.game_id)
+                      wx.hideLoading()
+                      wx.redirectTo({
+                        url: '/pages/gameOn/gameOn'
+                      })
+                    }
+                  }else{
                     wx.hideLoading()
-                    wx.redirectTo({
-                      url: '/pages/gameOn/gameOn'
-                    })
                   }
+                  
                 })
                 .catch(e => {
 
                   
                   wx.hideLoading()
                 })
-
+              
 
               // wx.request({
               //   url: 'https://x.tfcaijing.com/index.php/api/checkuser',
