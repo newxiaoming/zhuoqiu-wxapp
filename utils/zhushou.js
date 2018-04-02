@@ -1,4 +1,4 @@
-const DOMAIN = 'http://x.tfcaijing.com/index.php'
+const DOMAIN = 'https://x.tfcaijing.com/index.php'
 const LISTURL = DOMAIN + '/api/players'
 const SUBMITURL = DOMAIN + '/api/player/submitgame'
 const SUBMITBETURL = DOMAIN + '/api/zhuqiugame/submitbet'

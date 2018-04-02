@@ -278,7 +278,7 @@ Page({
       console.log(res.target)
     }
     return {
-      title: '桌球比赛结果',
+      title: '桌球比赛中',
       path: '/page/gameOn/gameOn?_g=' + wx.getStorageSync('game_id'),
       success: function (res) {
         // 分享成功
