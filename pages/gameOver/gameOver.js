@@ -28,7 +28,7 @@ Page({
     }
     return {
       title: '桌球比赛结果',
-      path: '/page/gameOver/gameOver?_g=' + wx.getStorageSync('game_id'),
+      path: '/pages/gameOver/gameOver?_g=' + wx.getStorageSync('game_id'),
       success: function (res) {
         // 分享成功
       },

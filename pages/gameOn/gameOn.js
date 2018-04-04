@@ -279,7 +279,7 @@ Page({
     }
     return {
       title: '桌球比赛中',
-      path: '/page/gameOn/gameOn?_g=' + wx.getStorageSync('game_id'),
+      path: '/pages/gameOn/gameOn?_g=' + wx.getStorageSync('game_id'),
       success: function (res) {
         // 分享成功
       },
