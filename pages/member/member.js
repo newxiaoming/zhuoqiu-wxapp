@@ -130,11 +130,13 @@ Page({
           // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
           wx.setStorageSync('players', d.data)
           wx.setStorageSync('game_id', d.game_id)//game_id: 游戏ID
+          app.globalData.game_id = d.game_id//game_id: 游戏ID
+          app.globalData.isbanker = 1//设为庄家
           this.setData({
             players: d.data
           })
           wx.redirectTo({
-            url: '../gameOn/gameOn'
+            url: '../gameOn/gameOn?_g=' + d.game_id
           })
         } else {
           wx.showToast({

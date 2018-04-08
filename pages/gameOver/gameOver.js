@@ -28,7 +28,7 @@ Page({
     }
     return {
       title: '桌球比赛结果',
-      path: '/pages/gameOver/gameOver?_g=' + wx.getStorageSync('game_id'),
+      path: '/pages/gameOn/gameOn?_g=' + app.globalData.game_id,
       success: function (res) {
         // 分享成功
       },
@@ -53,7 +53,7 @@ Page({
 
   },  
   getBeters: function(){
-    return app.zhushou.getBet(wx.getStorageSync('game_id'), '', wx.getStorageSync('openid'))
+    return app.zhushou.getBet(app.globalData.game_id, '', wx.getStorageSync('openid'))
       .then(d => {
         
         if (d.status == 200) {
@@ -79,7 +79,7 @@ Page({
       })
   },
   getWinner: function () {
-    return app.zhushou.getWinner(wx.getStorageSync('game_id'), '', wx.getStorageSync('openid'))
+    return app.zhushou.getWinner(app.globalData.game_id, '', wx.getStorageSync('openid'))
       .then(d => {
 
         if (d.status == 200) {
@@ -94,6 +94,32 @@ Page({
         } else {
           wx.showToast({
             title: '比赛结果数据异常',
+            icon: 'none',
+            mask: true
+          })
+        }
+        wx.hideLoading()
+      })
+      .catch(e => {
+        this.setData({ subtitle: '获取数据异常' })
+        console.error(e)
+        wx.hideLoading()
+      })
+  },
+  onPullDownRefresh: function () {
+    return app.zhushou.getBet(app.globalData.game_id, '', wx.getStorageSync('openid'))
+      .then(d => {
+
+        if (d.status == 200) {
+
+          this.setData({
+            beters: d.data,
+            count: d.count
+          })
+          console.log(d.count)
+        } else {
+          wx.showToast({
+            title: '投注数据异常',
             icon: 'none',
             mask: true
           })

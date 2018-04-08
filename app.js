@@ -10,6 +10,8 @@ App({
     env: 'debug',
     gameplayers: [],
     count: [],//投注数量,
+    game_id:0,//游戏ID
+    isbanker:'',//是否为庄家
   }, 
   /**
    * 桌球助手API
@@ -23,6 +25,40 @@ App({
     // wx.setStorageSync('logs', logs)
     var that = this;
     
+    wx.login({
+      success: function (res) {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (res.code) {
+          wx.getUserInfo({
+            success: function (request) {
+              //发起网络请求
+              return zhushou.checkuser(res.code, request.rawData, request.signature, request.encryptedData, request.iv)
+                .then(r => {
+                  wx.setStorageSync('isbanker', r.isbanker)
+                  wx.setStorageSync('openid', r.id)
+                  if (r.game_id) {
+                    if (r.isbanker == 1) {
+                      wx.setStorageSync('game_id', r.game_id)
+                      wx.hideLoading()
+                      wx.redirectTo({
+                        url: '/pages/gameOn/gameOn?_g=' + r.game_id
+                      })
+                    }
+                  } else {
+                    wx.hideLoading()
+                  }
+                })
+                .catch(e => {
+                  wx.hideLoading()
+                })
+            }
+          })
+          
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+    })
     // 获取用户信息
     wx.getSetting({
       success: res => {

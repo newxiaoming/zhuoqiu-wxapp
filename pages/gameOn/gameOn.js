@@ -26,9 +26,63 @@ Page({
     this.setData({
       height: app.globalData.windowHeight - 320,
     })
-    console.log(options._g)
-    this.getGamers()
-    this.getBeters()
+    
+    app.globalData.game_id = options._g
+    console.log(app.globalData.isbanker)
+    if (app.globalData.isbanker == ''){
+      wx.login({
+        success: function (res) {
+          // 发送 res.code 到后台换取 openId, sessionKey, unionId
+          if (res.code) {
+            wx.getUserInfo({
+              success: function (request) {
+                //发起网络请求
+                return app.zhushou.checkuser(res.code, request.rawData, request.signature, request.encryptedData, request.iv)
+                  .then(r => {
+                    
+                    wx.setStorageSync('isbanker', r.isbanker)
+                    wx.setStorageSync('openid', r.id)
+                    if (r.game_id) {
+                      if (r.isbanker == 1) {
+                        console.log('r.game_id' + r.isbanker)
+                        wx.setStorageSync('game_id', r.game_id)
+                        this.setData({
+                          hide: true,
+                          hidechooseWiner: false
+                        })
+                        wx.hideLoading()
+                      }
+                    } else {
+                      wx.hideLoading()
+                    }
+                    
+                  })
+                  .catch(e => {
+                    wx.hideLoading()
+                  })
+              }
+            })
+
+          } else {
+            console.log('登录失败！' + res.errMsg)
+          }
+        }
+      })
+    } else if (app.globalData.isbanker == 1){
+      this.setData({
+        hide: true,
+        hidechooseWiner: false
+      })
+    }
+    
+    // if(wx.getStorageSync('isbanker') == 1){
+    //   this.setData({
+    //     hide: true,
+    //     hidechooseWiner: false,
+    //   });
+    // }
+    this.getGamers(options._g)
+    this.getBeters(options._g)
         
   },
   radioChange: function(e){
@@ -45,10 +99,13 @@ Page({
     //   url: '../gameOver/gameOver?timeOver=' + timeOver
     // })   
   },
-  getGamers:function(){
+  getGamers:function(game_id = ''){
     
     wx.showLoading({ title: '拼命拉取数据...', mask: true })
-      return app.zhushou.getGamers( wx.getStorageSync('game_id'))
+    if(!game_id){
+      game_id = wx.getStorageSync('game_id')
+    }
+      return app.zhushou.getGamers( game_id )
         .then(d => {
           if (wx.getStorageSync('isbanker') === 1) {
             
@@ -98,7 +155,7 @@ Page({
 
     wx.showLoading({ title: '拼命提交中...', mask: true })
 
-    return app.zhushou.submitgame(this.data.ids, wx.getStorageSync('openid'), 1, this.data.winner, wx.getStorageSync('game_id'))
+    return app.zhushou.submitgame(this.data.ids, wx.getStorageSync('openid'), 1, this.data.winner, app.globalData.game_id)
       .then(d => {
         console.log(d.status)
         if (d.status) {
@@ -143,7 +200,7 @@ Page({
   },
   //投注
   submitBet: function() {
-    if (!wx.getStorageSync('game_id') || !this.data.money || !this.data.set_winner)
+    if (app.globalData.game_id ==0 || !this.data.money || !this.data.set_winner)
     {
       wx.showToast({
         title: '要选投注的选手呀！',
@@ -152,12 +209,11 @@ Page({
       })
       return
     }
-    return app.zhushou.submitBet(wx.getStorageSync('openid'), this.data.set_winner, wx.getStorageSync('game_id'), this.data.money, app.globalData.userInfo.avatarUrl)
+    console.log('submitBet game_id =' + app.globalData.game_id)
+    return app.zhushou.submitBet(wx.getStorageSync('openid'), this.data.set_winner, app.globalData.game_id, this.data.money, app.globalData.userInfo.avatarUrl)
       .then(d => {
         console.log(d.count)
         if (d.status) {
-          // this.setData({ subtitle: d.title, movies: this.data.movies.concat(d.subjects) })
-          
           this.setData({
             hasbet: true,
             hide: true
@@ -167,10 +223,10 @@ Page({
             title: '投注成功',
             icon: 'none'
           })
-          
-          // wx.redirectTo({
-          //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
-          // })
+
+          wx.redirectTo({
+            url: '/pages/gameOn/gameOn?_g=' + app.globalData.game_id
+          })
 
         } else {
           wx.showToast({
@@ -188,8 +244,11 @@ Page({
       })
   },
   //获取投注数据
-  getBeters: function () {
-    return app.zhushou.getBet(wx.getStorageSync('game_id'), this.data.ids, wx.getStorageSync('openid'))
+  getBeters: function (game_id = '') {
+    if(!game_id){
+      game_id = wx.getStorageSync('game_id')
+    }
+    return app.zhushou.getBet(game_id, this.data.ids, wx.getStorageSync('openid'))
       .then(d => {
       
         if (d.status == 200) {
@@ -201,13 +260,20 @@ Page({
           
           if(d.isbet==1)
           {
-            this.setData({
-              hide: true,
-              hidechooseWiner: false
-            })
+            // this.setData({
+            //   hide: true,
+            //   hidechooseWiner: false
+            // })
             // wx.redirectTo({
             //   url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
             // })
+          }
+
+          console.log(d.isfinish)
+          if (d.isfinish == 1) {
+            wx.redirectTo({
+              url: '/pages/gameOver/gameOver?_g=' + app.globalData.game_id
+            })
           }
           
           
@@ -231,7 +297,7 @@ Page({
   onPullDownRefresh: function () {
 
     wx.showNavigationBarLoading();
-    return app.zhushou.getBet(wx.getStorageSync('game_id'), this.data.ids, wx.getStorageSync('openid'))
+    return app.zhushou.getBet(app.globalData.game_id, this.data.ids, wx.getStorageSync('openid'))
       .then(d => {
         setTimeout(function () {
           wx.hideNavigationBarLoading()
@@ -253,7 +319,7 @@ Page({
           console.log(d.isfinish)
           if (d.isfinish == 1) {
             wx.redirectTo({
-              url: '../gameOver/gameOver?_g=' + wx.getStorageSync('game_id')
+              url: '/pages/gameOver/gameOver?_g=' + app.globalData.game_id
             })
           } 
 
@@ -279,7 +345,7 @@ Page({
     }
     return {
       title: '桌球比赛中',
-      path: '/pages/gameOn/gameOn?_g=' + wx.getStorageSync('game_id'),
+      path: '/pages/gameOn/gameOn?_g=' + app.globalData.game_id,
       success: function (res) {
         // 分享成功
       },

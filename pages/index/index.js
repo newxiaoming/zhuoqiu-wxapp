@@ -13,96 +13,96 @@ Page({
   onLoad: function () {
     wx.showLoading({ title: '拼命检查中...', mask: true })
     // 登录
-    wx.login({
-      success: function (res) {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.code) {
-          wx.getUserInfo({
-            success: function (request) {
-              //发起网络请求
+    // wx.login({
+    //   success: function (res) {
+    //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
+    //     if (res.code) {
+    //       wx.getUserInfo({
+    //         success: function (request) {
+    //           //发起网络请求
               
-              return app.zhushou.checkuser(res.code, request.rawData, request.signature, request.encryptedData, request.iv)
-                .then(r => {
+    //           return app.zhushou.checkuser(res.code, request.rawData, request.signature, request.encryptedData, request.iv)
+    //             .then(r => {
                   
-                  wx.setStorageSync('isbanker', r.isbanker)
-                  wx.setStorageSync('openid', r.id)
-                  if(r.game_id){
-                    if (r.isbanker == 1) {
-                      wx.setStorageSync('game_id', r.game_id)
-                      wx.hideLoading()
-                      wx.redirectTo({
-                        url: '/pages/gameOn/gameOn'
-                      })
-                    }
-                  }else{
-                    wx.hideLoading()
-                  }
+    //               wx.setStorageSync('isbanker', r.isbanker)
+    //               wx.setStorageSync('openid', r.id)
+    //               if(r.game_id){
+    //                 if (r.isbanker == 1) {
+    //                   wx.setStorageSync('game_id', r.game_id)
+    //                   wx.hideLoading()
+    //                   wx.redirectTo({
+    //                     url: '/pages/gameOn/gameOn'
+    //                   })
+    //                 }
+    //               }else{
+    //                 wx.hideLoading()
+    //               }
                   
-                })
-                .catch(e => {
+    //             })
+    //             .catch(e => {
 
                   
-                  wx.hideLoading()
-                })
+    //               wx.hideLoading()
+    //             })
               
 
-              // wx.request({
-              //   url: 'https://x.tfcaijing.com/index.php/api/checkuser',
-              //   method: "POST",
-              //   data: {
-              //     code: res.code,
-              //     rawData: request.rawData,
-              //     signature: request.signature,
-              //     encryptData: request.encryptedData,
-              //     iv: request.iv
-              //   },
-              //   success: function (r) {
-              //     wx.setStorageSync('isbanker', r.data.isbanker)
-              //     wx.setStorageSync('openid', r.data.id)
-              //     if (r.data.isbanker == 1) {
-              //       wx.setStorageSync('game_id', r.data.game_id)
+    //           // wx.request({
+    //           //   url: 'https://x.tfcaijing.com/index.php/api/checkuser',
+    //           //   method: "POST",
+    //           //   data: {
+    //           //     code: res.code,
+    //           //     rawData: request.rawData,
+    //           //     signature: request.signature,
+    //           //     encryptData: request.encryptedData,
+    //           //     iv: request.iv
+    //           //   },
+    //           //   success: function (r) {
+    //           //     wx.setStorageSync('isbanker', r.data.isbanker)
+    //           //     wx.setStorageSync('openid', r.data.id)
+    //           //     if (r.data.isbanker == 1) {
+    //           //       wx.setStorageSync('game_id', r.data.game_id)
 
-              //       wx.redirectTo({
-              //         url: '/pages/gameOn/gameOn'
-              //       })
-              //     }
-              //   }
-              // })
-              // wx.hideLoading()
+    //           //       wx.redirectTo({
+    //           //         url: '/pages/gameOn/gameOn'
+    //           //       })
+    //           //     }
+    //           //   }
+    //           // })
+    //           // wx.hideLoading()
 
 
-            }
-          })
-          // //发起网络请求
-          // wx.request({
-          //   url: 'http://192.168.0.127:8088/api/checkuser',
-          //   data: {
-          //     code: res.code,
-          //     rawData: request.rawData,
-          //     signature: request.signature,
-          //     encryptData: request.encryptedData,
-          //     iv: request.iv
-          //   },
-          //   success: function(result){
-          //     wx.setStorageSync('isbanker', result.data.isbanker)
-          //     wx.setStorageSync('openid', result.data.id)
-          //     if (result.data.isbanker == 1) {
-          //       wx.setStorageSync('game_id', result.data.game_id)
-          //       wx.redirectTo({
-          //         url: '/pages/gameOn/gameOn'
-          //       })
-          //     }
-          //     // wx.setStorage({
-          //     //   key: 'isbanker',
-          //     //   data: result.data.isbanker,
-          //     // })
-          //   }
-          // })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    })
+    //         }
+    //       })
+    //       // //发起网络请求
+    //       // wx.request({
+    //       //   url: 'http://192.168.0.127:8088/api/checkuser',
+    //       //   data: {
+    //       //     code: res.code,
+    //       //     rawData: request.rawData,
+    //       //     signature: request.signature,
+    //       //     encryptData: request.encryptedData,
+    //       //     iv: request.iv
+    //       //   },
+    //       //   success: function(result){
+    //       //     wx.setStorageSync('isbanker', result.data.isbanker)
+    //       //     wx.setStorageSync('openid', result.data.id)
+    //       //     if (result.data.isbanker == 1) {
+    //       //       wx.setStorageSync('game_id', result.data.game_id)
+    //       //       wx.redirectTo({
+    //       //         url: '/pages/gameOn/gameOn'
+    //       //       })
+    //       //     }
+    //       //     // wx.setStorage({
+    //       //     //   key: 'isbanker',
+    //       //     //   data: result.data.isbanker,
+    //       //     // })
+    //       //   }
+    //       // })
+    //     } else {
+    //       console.log('登录失败！' + res.errMsg)
+    //     }
+    //   }
+    // })
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
